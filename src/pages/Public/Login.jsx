@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Box, Grid, Typography } from "@mui/material";
@@ -9,6 +9,14 @@ import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 const Login = () => {
   const navigation = useNavigate()
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("token"))) {
+      navigation("/")
+    }
+  }, [])
+
+
   const checkLogin = (params) => {
     let allUsers = JSON.parse(localStorage.getItem("users"));
     let haveUser = allUsers.find(item => item.email == params.email && item.password == params.password);
@@ -16,7 +24,7 @@ const Login = () => {
     if (haveUser) {
       let randTokenNum = Math.floor(Math.random() * 1000)
       localStorage.setItem("token", JSON.stringify(haveUser.email + randTokenNum));
-      localStorage.setItem("activeUser", JSON.stringify(haveUser.name));
+      localStorage.setItem("activeUser", JSON.stringify(haveUser.email));
       navigation("/")
     } else {
       alert("user not found !")
@@ -99,14 +107,9 @@ const Login = () => {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
-                <Link to={'/register'} variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link to={'/register'} variant="body2" style={{ color: "blue", textDecoration: "none" }}>
+                  "Don't have an account? Sign Up"
                 </Link>
               </Grid>
             </Grid>

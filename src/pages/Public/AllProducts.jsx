@@ -7,7 +7,7 @@ import { CartContext } from '../../Context/Cart';
 
 function AllProducts() {
   const { isLoading, error, data, isSuccess } = useContext(ProductsContext);
-  const {addCart} = useContext(CartContext);
+  const { addCart } = useContext(CartContext);
 
 
   return (
@@ -36,7 +36,7 @@ function AllProducts() {
         }
         {isSuccess &&
           data.map((item) => (
-            <Grid item xs={3} key={item.id}>
+            <Grid item xs={12} md={5} lg={3} key={item.id}>
               <Item>
                 <Card sx={{ maxWidth: 345, minHeight: 415, position: "relative" }}>
                   <CardMedia
@@ -57,7 +57,7 @@ function AllProducts() {
                     </Typography>
                   </CardContent>
                   <CardActions sx={{ position: "absolute", bottom: 0 }}>
-                    <Button variant="contained" onClick={() => addCart(item)}>Add Cart</Button>
+                    <Button variant="contained" onClick={() => addCart(item, "incriment")}>Add Cart</Button>
                     <Button size="small" ><Link style={{ textDecoration: "none", color: "blue" }} to={"product/" + item.id}>Learn More</Link></Button>
                   </CardActions>
                 </Card>
