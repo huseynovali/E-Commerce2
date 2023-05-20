@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { CartContext } from '../../Context/Cart';
 
 function AllProducts() {
-  const [limit, setLimit] = useState(5)
+  const [limit, setLimit] = useState(8)
   const { useGetProduct } = useContext(ProductsContext);
   const { isLoading, error, data, isSuccess } = useGetProduct(limit);
 
@@ -72,7 +72,7 @@ function AllProducts() {
       </Grid>
       <div style={{ display: "flex", justifyContent: "center", width: "100%", padding: 50 }}>
         {
-          limit <= data?.length + 1 ? <Button variant="contained" onClick={() => { setLimit(item => item + 5) }} >More</Button> : null
+          limit <= data?.length + 1 ? <Button variant="contained" onClick={() => { setLimit(item => item + 8) }} >More</Button> : null
         }
       </div>
     </div>

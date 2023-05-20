@@ -17,9 +17,8 @@ function Profile() {
   }, [])
   return (
     <Grid container spacing={2} sx={{ padding: 5 }}>
-      <Grid item xs={3}>
-        <Card sx={{ maxWidth: 345 }}>
-
+      <Grid item md={3} xs={24}>
+        <Card sx={{width:'100%'}}>
           <CardMedia sx={{ display: "flex", alignItems: "center", justifyContent: "center", m: 5 }}>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 150, height: 150 }} />
           </CardMedia>
@@ -68,11 +67,10 @@ function Profile() {
 
           </CardActions>
         </Card>
-
         <ModalComponent open={open} setOpen={setOpen} handleClose={handleClose} />
-
       </Grid>
-      <Grid item xs={8}>
+
+      <Grid item xs={24} md={8}>
 
       </Grid>
     </Grid>

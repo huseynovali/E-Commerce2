@@ -50,7 +50,6 @@ export default function Cart() {
                   </TableCell>
                   <TableCell align="center" colSpan={3}>Price</TableCell>
                 </TableRow>
-
                 <TableRow>
                   <TableCell align='center'>img</TableCell>
                   <TableCell align='center'>Name</TableCell>
