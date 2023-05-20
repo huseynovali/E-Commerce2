@@ -4,11 +4,13 @@ import { ProductsContext } from '../Context/Products'
 import { Button, Card, CardActions, CardContent, CardMedia, Grid, Rating, Typography } from '@mui/material';
 import Item from "@mui/material/ListItem";
 import { useParams } from 'react-router-dom';
+import { CartContext } from '../Context/Cart';
 function ProductDetails() {
     const { id } = useParams()
-
     const { useProductById } = useContext(ProductsContext);
     const { isLoading, error, data, isSuccess } = useProductById(id);
+    const { addCart } = useContext(CartContext)
+
     return (
         <>
             {
@@ -44,7 +46,7 @@ function ProductDetails() {
 
                                     </CardContent>
                                     <CardActions >
-                                        <Button size="small">Add Cart</Button>
+                                        <Button size="small" onClick={() => { addCart(data, "incriment") }}>Add Cart</Button>
                                     </CardActions>
                                 </div>
                             </Card>

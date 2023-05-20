@@ -1,8 +1,13 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material'
-import React, { useEffect } from 'react'
+import { Avatar, Button, Card, CardActions, CardContent, CardMedia, Grid, List, ListItem, ListItemText, Modal, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import ModalComponent from '../../Components/Modal';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 function Profile() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const User = JSON.parse(localStorage.getItem("activeUser"))
   const navigation = useNavigate()
   useEffect(() => {
@@ -14,32 +19,57 @@ function Profile() {
     <Grid container spacing={2} sx={{ padding: 5 }}>
       <Grid item xs={3}>
         <Card sx={{ maxWidth: 345 }}>
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              sx={{ borderRadius: "100%" }}
-              height="140"
-              image=""
-              alt="green iguana"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Lizard
-              </Typography>
-              <Typography
-                variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over 6,000
-                species, ranging across all continents except Antarctica
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Button size="small" color="primary">
-              Share
-            </Button>
+
+          <CardMedia sx={{ display: "flex", alignItems: "center", justifyContent: "center", m: 5 }}>
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 150, height: 150 }} />
+          </CardMedia>
+          <CardContent>
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} >
+
+                <List >
+                  <ListItem>
+                    <ListItemText> Name:{User?.name}</ListItemText>
+                  </ListItem>
+                  {
+                    User.address && <>
+                      <Typography sx={{ m: "15px auto", width: 50, height: 50, bgcolor: "#aaa", borderRadius: "50%", display: "flex", justifyContent: "center", alignItems: "center" }} variant="h6" component="span">
+                        <LocationOnIcon />
+                      </Typography>
+                      <ListItem>
+                        <ListItemText>Country:{User.address?.country}</ListItemText>
+                      </ListItem>
+                      <ListItem>
+                        <ListItemText>City:{User.address?.city}</ListItemText>
+                      </ListItem>
+                      <ListItem>
+                        <ListItemText>Street:{User.address?.street}</ListItemText>
+                      </ListItem>
+                      <Typography sx={{ m: "15px auto", width: 50, height: 50, fontSize: 20, bgcolor: "#aaa", borderRadius: "50%", display: "flex", justifyContent: "center", alignItems: "center" }} variant="h6" component="span">
+                        <LocalPhoneIcon />
+                      </Typography>
+                      <ListItem>
+                        <ListItemText>Phone:{User?.phone}</ListItemText>
+                      </ListItem>
+
+                    </>
+                  }
+
+                </List>
+              </Grid>
+            </Grid>
+
+          </CardContent>
+
+          <CardActions>{
+            !User.address ? <Button onClick={handleOpen}>Add address</Button> : <Button onClick={handleOpen}>Edit Info</Button>
+          }
+
           </CardActions>
         </Card>
 
+        <ModalComponent open={open} setOpen={setOpen} handleClose={handleClose} />
 
       </Grid>
       <Grid item xs={8}>

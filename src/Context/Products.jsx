@@ -6,17 +6,20 @@ export const ProductsContext = createContext("");
 
 export const ProductsProvider = ({ children }) => {
 
-    const { isLoading, error, data, isSuccess } = useQuery('productsData', () =>
-        axiosInstance.get('products')
+
+
+    const useGetProduct = paramsLimit => useQuery(['productsData',paramsLimit], () =>
+        axiosInstance.get('products?limit='+paramsLimit)
             .then(res => res.data)
     );
+
     const useProductById = productId => useQuery(['productById', productId], () =>
-    axiosInstance.get(`products/${productId}`)
-      .then(res => res.data)
-  );
+        axiosInstance.get(`products/${productId}`)
+            .then(res => res.data)
+    );
 
     return (
-        <ProductsContext.Provider value={{ isLoading, error, data, isSuccess, useProductById }}>
+        <ProductsContext.Provider value={{ useGetProduct , useProductById }}>
             {children}
         </ProductsContext.Provider>
     );

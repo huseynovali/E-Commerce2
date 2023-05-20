@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button, ButtonGroup, Grid } from '@mui/material';
 import { CartContext } from '../../Context/Cart';
-import { json } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
 
@@ -102,7 +102,7 @@ export default function Cart() {
 
 
             </Table>
-            <Grid container spacing={3} style={{ width: "90%", justifyContent:"end", margin: "20px 0" }}>
+            <Grid container spacing={3} style={{ width: "90%", justifyContent: "end", margin: "20px 0" }}>
               <Grid item >
                 <Button variant="contained" onClick={() => clearAllCart()}>Clear All</Button>
               </Grid>
@@ -111,7 +111,9 @@ export default function Cart() {
               </Grid>
             </Grid>
           </TableContainer > :
-          <h1>Product Not Found !</h1>
+          <div style={{ width: "100%", height: "80vh", display: 'flex', alignItems: 'center', justifyContent: "center" }}>
+            <h1>Product Not Found ! <Link to="/" style={{ color: "blue", textDecoration: "none" }}>continue shopping</Link> </h1>
+          </div>
       }
     </>
 

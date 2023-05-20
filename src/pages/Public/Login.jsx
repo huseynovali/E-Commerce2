@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Box, Grid, Typography } from "@mui/material";
-import * as Yup from "yup"
 import { useFormik } from "formik";
-import { Link, json, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import { addValidationLoginSchema } from "../../validation/validation";
+
 const Login = () => {
   const navigation = useNavigate()
 
@@ -18,13 +19,12 @@ const Login = () => {
 
 
   const checkLogin = (params) => {
-    let allUsers = JSON.parse(localStorage.getItem("users"));
+    let allUsers = JSON.parse(localStorage.getItem("users")) || [];
     let haveUser = allUsers.find(item => item.email == params.email && item.password == params.password);
-
     if (haveUser) {
       let randTokenNum = Math.floor(Math.random() * 1000)
       localStorage.setItem("token", JSON.stringify(haveUser.email + randTokenNum));
-      localStorage.setItem("activeUser", JSON.stringify(haveUser.email));
+      localStorage.setItem("activeUser", JSON.stringify(haveUser));
       navigation("/")
     } else {
       alert("user not found !")
@@ -32,20 +32,12 @@ const Login = () => {
   }
 
 
-
-  const addValidationSchema = Yup.object().shape({
-    email: Yup.string()
-      .required()
-      .email()
-      .matches(/^\S+@\S+\.\S+$/, 'The domain you entered is not valid !')
-      .min(3),
-  })
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    validationSchema: addValidationSchema,
+    validationSchema: addValidationLoginSchema,
     onSubmit: (values) => {
       checkLogin(values)
     },

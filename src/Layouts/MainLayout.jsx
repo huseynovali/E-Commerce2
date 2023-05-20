@@ -8,6 +8,7 @@ import { CartContext } from '../Context/Cart';
 function MainLayout() {
     const navigate = useNavigate()
     const { addCart, cart } = useContext(CartContext)
+
     const logout = () => {
         localStorage.removeItem('token')
         localStorage.removeItem('activeUser');
@@ -38,7 +39,7 @@ function MainLayout() {
                                     aria-label="show 17 new notifications"
                                     color="inherit"
                                 >
-                                    <Badge badgeContent={cart.length} color="error">
+                                    <Badge badgeContent={cart?.length} color="error">
                                         <ShoppingCart />
                                     </Badge>
                                 </IconButton>
