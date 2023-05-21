@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import ModalComponent from '../../Components/Modal';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import UserOrderList from '../../Components/UserOrderList';
 function Profile() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -71,7 +72,7 @@ function Profile() {
       </Grid>
 
       <Grid item xs={24} md={8}>
-
+        <UserOrderList/>
       </Grid>
     </Grid>
   )

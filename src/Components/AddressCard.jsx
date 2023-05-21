@@ -2,31 +2,35 @@ import React, { useState } from 'react'
 import { Button, Card, CardActions, CardContent, Checkbox, Grid, Modal, Radio, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import AddressModal from './AddressModal';
-function AddressCard({ chcekedAddress, setCheckedAddress }) {
+
+
+function AddressCard({ checkedAddress, setCheckedAddress }) {
+    const [change,setChange] = useState(true)
     let UserInfo = JSON.parse(localStorage.getItem('activeUser'))
-    let orderAddress = JSON.parse(localStorage.getItem("orderAddress")) || [UserInfo.address];
+    let orderAddress = JSON.parse(localStorage.getItem("orderAddress")) || [UserInfo.address] || [];
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleChangeAddress = (paramValueIndex, paramValueItem) => {
-        setCheckedAddress({ index: paramValueIndex, ...paramValueItem });
+        setCheckedAddress({ addressindex: paramValueIndex, ...paramValueItem });
     }
 
 
-
+    console.log(checkedAddress);
     return (
         <>
-            <AddressModal open={open} handleClose={handleClose} />
+            <AddressModal open={open} handleClose={handleClose}  setChange={setChange} change={change}/>
             <Grid container spacing={3} >
                 {console.log(orderAddress)}
                 {
-                    orderAddress.map((item, index) => {
+
+                    orderAddress[0]?.city ? orderAddress.map((item, index) => {
                         return <Grid item>
                             <Card sx={{ minWidth: 275 }}>
                                 <CardContent>
                                     <Typography variant='h5' sx={{ m: 2, textAlign: "center" }} >Address {index + 1}
                                         <Radio
-                                            checked={chcekedAddress.index === index}
+                                            checked={checkedAddress.addressindex == index}
                                             onChange={() => handleChangeAddress(index, item)}
                                             value={index}
                                             name="radio-buttons"
@@ -48,7 +52,8 @@ function AddressCard({ chcekedAddress, setCheckedAddress }) {
 
                             </Card>
                         </Grid>
-                    })
+
+                    }) : null
                 }
                 <Grid item>
                     <Card sx={{ minWidth: 275, height: 240 }}>

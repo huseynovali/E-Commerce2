@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -7,32 +7,50 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import AddressCard from '../../Components/AddressCard';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
+import { CartContext } from '../../Context/Cart';
+import moment from 'moment/moment';
 
 const steps = ['Select Address', 'Card Operations', 'Confirmation'];
 
-export default function HorizontalLinearStepper() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
-    const [chcekedAddress, setCheckedAddress] = React.useState(0);
+export default function Order() {
+    const { setCart } = useContext(CartContext)
+    let activUser = JSON.parse(localStorage.getItem("activeUser"))
+    const [checkedAddress, setCheckedAddress] = useState({
+        addressindex: 0,
+        country: activUser.address?.country || '',
+        city: activUser.address?.city || '',
+        street: activUser.address?.street || '',
+        zipcode: activUser.address?.zipcode || ''
+    });
+
+    const navigation = useNavigate();
+
+    useEffect(() => {
+        if (!localStorage.getItem("token")) {
+            navigation("/login");
+        }
+        console.log(checkedAddress);
+    }, []);
+
+    const [activeStep, setActiveStep] = useState(0);
+    const [skipped, setSkipped] = useState(new Set());
+
+
     const isStepOptional = (step) => {
         return step === 1;
     };
-    const navigation = useNavigate()
-
-    React.useEffect(() => {
-        if (!JSON.parse(localStorage.getItem("token"))) {
-            navigation("/")
-        }
-    }, [])
-
 
     const confirmationData = () => {
-        let date = new Date();
-        let orderData = JSON.parse(localStorage.getItem("userOrderData")) ||[]
-        localStorage.setItem("userOrderData", JSON.stringify([...orderData,{ ...chcekedAddress, date: date }]));
-       navigation("/")
-    }
+        let date = moment(new Date()).format('LLLL');
+        let orderData = JSON.parse(localStorage.getItem("userOrderData")) || [];
+        let cart = JSON.parse(localStorage.getItem("cart"))
+        localStorage.setItem("userOrderData", JSON.stringify([...orderData, { items: [...cart], date: date, ...checkedAddress }]));
+        setCart([])
+        localStorage.setItem('cart', JSON.stringify([]))
+        navigation("/");
+    };
+
     const isStepSkipped = (step) => {
         return skipped.has(step);
     };
@@ -50,10 +68,6 @@ export default function HorizontalLinearStepper() {
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
-
-
-
-
 
     return (
         <Box sx={{ width: '100%', p: 5 }}>
@@ -77,34 +91,37 @@ export default function HorizontalLinearStepper() {
                 })}
             </Stepper>
             {activeStep === steps.length ? (
-                <React.Fragment>
+                <>
                     <Typography sx={{ mt: 2, mb: 1 }}>
                         All steps completed - you&apos;re finished
                     </Typography>
 
-                </React.Fragment>
+                </>
             ) : (
-                <React.Fragment>
+                <>
                     {
+
                         activeStep == 0 &&
-                        <AddressCard chcekedAddress={chcekedAddress} setCheckedAddress={setCheckedAddress} />
+                        localStorage.getItem("token") &&
+                        <AddressCard checkedAddress={checkedAddress} setCheckedAddress={setCheckedAddress} />
+
                     }
                     {
-                        activeStep == 1 &&
+                        activeStep === 1 &&
                         <Typography sx={{ mt: 2, mb: 1 }}>
                             Cart Operation
                         </Typography>
                     }
                     {
-                        activeStep == 2 &&
+                        activeStep === 2 &&
                         <Typography sx={{ mt: 2, mb: 1 }}>
                             <Typography variant='h6'> Address</Typography>
-                            <Typography > Country:{chcekedAddress.country}</Typography>
-                            <Typography > City:{chcekedAddress.city}</Typography>
-                            <Typography > Street:{chcekedAddress.street}</Typography>
-                            <Typography > ZipCode:{chcekedAddress.zipcode}</Typography>
+                            <Typography> Country: {checkedAddress.country}</Typography>
+                            <Typography> City: {checkedAddress.city}</Typography>
+                            <Typography> Street: {checkedAddress.street}</Typography>
+                            <Typography> ZipCode: {checkedAddress.zipcode}</Typography>
                             <Typography variant='h6'> Card</Typography>
-                            <Typography > Card data</Typography>
+                            <Typography> Card data</Typography>
                         </Typography>
                     }
 
@@ -123,14 +140,16 @@ export default function HorizontalLinearStepper() {
                             <Button onClick={() => (handleNext(), confirmationData())}>
                                 Finish
                             </Button> :
-                            <Button onClick={handleNext}>
-                                Next
-                            </Button>
+                            (
+                                activUser.address?.country &&
+                                <Button onClick={handleNext}>
+                                    Next
+                                </Button>
+                            )
                         }
                     </Box>
-                </React.Fragment>
-            )
-            }
-        </Box >
+                </>
+            )}
+        </Box>
     );
 }

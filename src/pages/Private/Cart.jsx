@@ -106,6 +106,7 @@ export default function Cart() {
                 <Button variant="contained" onClick={() => clearAllCart()}>Clear All</Button>
               </Grid>
               <Grid item >
+
                 <Link to="order">
                   <Button variant="contained" >Order</Button>
                 </Link>

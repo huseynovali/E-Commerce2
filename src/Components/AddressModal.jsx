@@ -1,13 +1,13 @@
 import { Box, Button, Modal, TextField } from '@mui/material'
 import { useFormik } from 'formik';
 import { MuiTelInput } from 'mui-tel-input';
-import React from 'react'
+import React, { useState } from 'react'
 
-export default function AddressModal({ open, handleClose }) {
+export default function AddressModal({ open, handleClose,change,setChange }) {
     const User = JSON.parse(localStorage.getItem("activeUser"));
     const Users = JSON.parse(localStorage.getItem("users"));
-    let orderAddress = JSON.parse(localStorage.getItem("orderAddress")) || [User.address];
-
+    let orderAddress = JSON.parse(localStorage.getItem("orderAddress")) || [User.address] || [];
+ 
     const style = {
         position: 'absolute',
         top: '50%',
@@ -21,21 +21,31 @@ export default function AddressModal({ open, handleClose }) {
         background: "white"
     };
     const onSubmit = (values) => {
-      localStorage.setItem('orderAddress',JSON.stringify([...orderAddress, values]))
-      values.city=""
-      values.country=""
-      values.street=""
-      values.zipcode='';
-      handleClose()
-    };
+        if (!User.address) {
+            User.address = values;
+            localStorage.setItem("activeUser", JSON.stringify(User));
+            localStorage.setItem("orderAddress", JSON.stringify([values]));
+            window.location.reload()
+        }
+        else {
+            localStorage.setItem("orderAddress", JSON.stringify([...orderAddress, values]));
+            window.location.reload()
+        }
 
+
+        values.city = "";
+        values.country = "";
+        values.street = "";
+        values.zipcode = "";
+        handleClose();
+    };
 
     const formik = useFormik({
         initialValues: {
-                city: '',
-                country: '',
-                street: '',
-                zipcode: '',
+            city: '',
+            country: '',
+            street: '',
+            zipcode: '',
         },
         onSubmit: onSubmit
 
@@ -79,22 +89,22 @@ export default function AddressModal({ open, handleClose }) {
         >
             <Box style={style} component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
                 {inputTypeData.map((input) => (
-                <TextField
-                key={input.id}
-                margin="normal"
-                required
-                fullWidth
-                id={input.id}
-                label={input.label}
-                name={input.inputname}
-                autoComplete={input.autoComplete}
-                autoFocus={input.inputname === 'city'}
-                type={input.type}
-                value={formik.values[input.inputname]} // Değişiklik burada yapıldı
-                onChange={formik.handleChange}
-                error={formik.touched[input.inputname] && Boolean(formik.errors[input.inputname])} // Değişiklik burada yapıldı
-                helperText={formik.touched[input.inputname] && formik.errors[input.inputname]} // Değişiklik burada yapıldı
-              />
+                    <TextField
+                        key={input.id}
+                        margin="normal"
+                        required
+                        fullWidth
+                        id={input.id}
+                        label={input.label}
+                        name={input.inputname}
+                        autoComplete={input.autoComplete}
+                        autoFocus={input.inputname === 'city'}
+                        type={input.type}
+                        value={formik.values[input.inputname]} // Değişiklik burada yapıldı
+                        onChange={formik.handleChange}
+                        error={formik.touched[input.inputname] && Boolean(formik.errors[input.inputname])} // Değişiklik burada yapıldı
+                        helperText={formik.touched[input.inputname] && formik.errors[input.inputname]} // Değişiklik burada yapıldı
+                    />
 
                 ))}
                 <Button
