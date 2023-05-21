@@ -7,13 +7,14 @@ import Profile from '../pages/Private/Profile'
 import Cart from "../pages/Private/Cart";
 import Admin from "../pages/Private/Admin";
 import ProductDetails from "../Components/ProductDetails";
+import Order from "../pages/Private/Order";
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
         children: [
             {
-                index:true,
+                path: '/',
                 element: <AllProducts />,
 
             }, {
@@ -39,12 +40,18 @@ export const router = createBrowserRouter([
                 path: "cart",
                 element: <Cart />,
 
+
+            }, {
+                path: "cart/order",
+                element: <Order />,
+
             },
             {
                 path: "admin",
                 element: <Admin />,
 
             },
+
         ],
     },
 
