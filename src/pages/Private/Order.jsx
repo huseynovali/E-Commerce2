@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import AddressCard from '../../Components/AddressCard';
+import { useNavigate } from 'react-router-dom';
 
 const steps = ['Select Address', 'Card Operations', 'Confirmation'];
 
@@ -17,7 +18,21 @@ export default function HorizontalLinearStepper() {
     const isStepOptional = (step) => {
         return step === 1;
     };
+    const navigation = useNavigate()
 
+    React.useEffect(() => {
+        if (!JSON.parse(localStorage.getItem("token"))) {
+            navigation("/")
+        }
+    }, [])
+
+
+    const confirmationData = () => {
+        let date = new Date();
+        let orderData = JSON.parse(localStorage.getItem("userOrderData")) ||[]
+        localStorage.setItem("userOrderData", JSON.stringify([...orderData,{ ...chcekedAddress, date: date }]));
+       navigation("/")
+    }
     const isStepSkipped = (step) => {
         return skipped.has(step);
     };
@@ -36,24 +51,9 @@ export default function HorizontalLinearStepper() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
-    };
 
-    const handleReset = () => {
-        setActiveStep(0);
-    };
+
 
     return (
         <Box sx={{ width: '100%', p: 5 }}>
@@ -81,10 +81,7 @@ export default function HorizontalLinearStepper() {
                     <Typography sx={{ mt: 2, mb: 1 }}>
                         All steps completed - you&apos;re finished
                     </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleReset}>Reset</Button>
-                    </Box>
+
                 </React.Fragment>
             ) : (
                 <React.Fragment>
@@ -95,14 +92,19 @@ export default function HorizontalLinearStepper() {
                     {
                         activeStep == 1 &&
                         <Typography sx={{ mt: 2, mb: 1 }}>
-
-
+                            Cart Operation
                         </Typography>
                     }
                     {
                         activeStep == 2 &&
                         <Typography sx={{ mt: 2, mb: 1 }}>
-
+                            <Typography variant='h6'> Address</Typography>
+                            <Typography > Country:{chcekedAddress.country}</Typography>
+                            <Typography > City:{chcekedAddress.city}</Typography>
+                            <Typography > Street:{chcekedAddress.street}</Typography>
+                            <Typography > ZipCode:{chcekedAddress.zipcode}</Typography>
+                            <Typography variant='h6'> Card</Typography>
+                            <Typography > Card data</Typography>
                         </Typography>
                     }
 
@@ -116,15 +118,15 @@ export default function HorizontalLinearStepper() {
                             Back
                         </Button>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        {isStepOptional(activeStep) && (
-                            <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                                Skip
-                            </Button>
-                        )}
 
-                        <Button onClick={handleNext}>
-                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                        </Button>
+                        {activeStep === steps.length - 1 ?
+                            <Button onClick={() => (handleNext(), confirmationData())}>
+                                Finish
+                            </Button> :
+                            <Button onClick={handleNext}>
+                                Next
+                            </Button>
+                        }
                     </Box>
                 </React.Fragment>
             )

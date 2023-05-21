@@ -8,8 +8,8 @@ function AddressCard({ chcekedAddress, setCheckedAddress }) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const handleChangeAddress = (paramValue) => {
-        setCheckedAddress(paramValue);
+    const handleChangeAddress = (paramValueIndex, paramValueItem) => {
+        setCheckedAddress({ index: paramValueIndex, ...paramValueItem });
     }
 
 
@@ -26,8 +26,8 @@ function AddressCard({ chcekedAddress, setCheckedAddress }) {
                                 <CardContent>
                                     <Typography variant='h5' sx={{ m: 2, textAlign: "center" }} >Address {index + 1}
                                         <Radio
-                                            checked={chcekedAddress === index}
-                                            onChange={() => handleChangeAddress(index)}
+                                            checked={chcekedAddress.index === index}
+                                            onChange={() => handleChangeAddress(index, item)}
                                             value={index}
                                             name="radio-buttons"
 
