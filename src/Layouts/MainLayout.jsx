@@ -47,9 +47,10 @@ function MainLayout() {
                             {
                                 localStorage.getItem("token") ?
                                     <>
+                                    <Link to={'/addProduct'}>
                                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                                             <Inventory />
-                                        </IconButton>
+                                        </IconButton></Link>
                                         <IconButton
                                             size="large"
                                             edge="end"

@@ -20,6 +20,7 @@ function OrderProductModal({ open, handleCloseModal, selectedOrder }) {
                                 <ListItem key={index}>
                                     <img src={item.image} alt="Item" style={{ width: '64px', height: '64px', marginRight: '16px' }} />
                                     <ListItemText primary={item.title} secondary={`Price: $${item.price}`} />
+                                    <ListItemText primary={`Count: ${item.count}`} />
                                 </ListItem>
                             ))}
                         </List>

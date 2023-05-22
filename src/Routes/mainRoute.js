@@ -8,6 +8,7 @@ import Cart from "../pages/Private/Cart";
 import Admin from "../pages/Private/Admin";
 import ProductDetails from "../Components/ProductDetails";
 import Order from "../pages/Private/Order";
+import AddNewProduct from "../pages/Private/AddNewProduct";
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
                 element: <Admin />,
 
             },
+            {
+                path:"addProduct",
+                element:<AddNewProduct/>
+            }
 
         ],
     },

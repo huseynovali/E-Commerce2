@@ -5,7 +5,7 @@ import AddressModal from './AddressModal';
 
 
 function AddressCard({ checkedAddress, setCheckedAddress }) {
-    const [change,setChange] = useState(true)
+    const [change, setChange] = useState(true)
     let UserInfo = JSON.parse(localStorage.getItem('activeUser'))
     let orderAddress = JSON.parse(localStorage.getItem("orderAddress")) || [UserInfo.address] || [];
     const [open, setOpen] = useState(false);
@@ -19,7 +19,7 @@ function AddressCard({ checkedAddress, setCheckedAddress }) {
     console.log(checkedAddress);
     return (
         <>
-            <AddressModal open={open} handleClose={handleClose}  setChange={setChange} change={change}/>
+            <AddressModal open={open} handleClose={handleClose} setChange={setChange} change={change} />
             <Grid container spacing={3} >
                 {console.log(orderAddress)}
                 {
