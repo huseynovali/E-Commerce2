@@ -7,12 +7,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button, ButtonGroup, Grid } from '@mui/material';
-import { CartContext } from '../../Context/Cart';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Cart() {
-
-  const { addCart, cart, setCart } = useContext(CartContext)
+  const CartReducer = useSelector(state => state);
+  console.log(CartReducer);
   const TAX_RATE = 0.1;
   function ccyFormat(num) {
     return `${num.toFixed(2)}`;
@@ -27,11 +27,9 @@ export default function Cart() {
   function subtotal(items) {
     return [...items].map(({ sum }) => sum).reduce((sum, i) => sum += i, 0);
   }
-  function clearAllCart() {
-    setCart([])
-    localStorage.setItem("cart", JSON.stringify([]))
-  }
-  const rows = [...cart]?.map((item) => ({ ...item, ...createRow(item.count, item.price) }))
+
+  const dispatch = useDispatch()
+  const rows = [...CartReducer]?.map((item) => ({ ...item, ...createRow(item.count, item.price) }))
   console.log(subtotal(rows));
   const invoiceSubtotal = subtotal(rows);
   const invoiceTaxes = TAX_RATE * invoiceSubtotal;
@@ -70,9 +68,9 @@ export default function Cart() {
                     <TableCell align="right">
 
                       <ButtonGroup variant="outlined" aria-label="outlined button group">
-                        <Button onClick={() => addCart(row, "dicriment")}>-</Button>
+                        <Button onClick={() => dispatch({ type: "REDUCE_COUNT_CART", payload: row })}>-</Button>
                         <Button disabled>{row.count}</Button>
-                        <Button onClick={() => addCart(row, "incriment")}>+</Button>
+                        <Button onClick={() => dispatch({ type: "ADD_CART", payload: row })}>+</Button>
                       </ButtonGroup>
                     </TableCell>
                     <TableCell align="right">{ccyFormat(row.price)}</TableCell>
@@ -103,7 +101,7 @@ export default function Cart() {
             </Table>
             <Grid container spacing={3} style={{ width: "90%", justifyContent: "end", margin: "20px 0" }}>
               <Grid item >
-                <Button variant="contained" onClick={() => clearAllCart()}>Clear All</Button>
+                <Button variant="contained" onClick={() => dispatch({ type: "CLEAR_ALL" })}>Clear All</Button>
               </Grid>
               <Grid item >
 

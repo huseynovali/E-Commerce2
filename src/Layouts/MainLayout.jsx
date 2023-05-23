@@ -4,17 +4,16 @@ import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { AccountCircle, Inventory, ShoppingCart } from '@mui/icons-material';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { CartContext } from '../Context/Cart';
+import { useSelector } from 'react-redux';
+
 function MainLayout() {
     const navigate = useNavigate()
-    const { addCart, cart } = useContext(CartContext)
-
     const logout = () => {
         localStorage.removeItem('token')
         localStorage.removeItem('activeUser');
         navigate("/")
     }
-
+  const CartReducer = useSelector(state=>state)
 
     return (
         <div>
@@ -39,7 +38,7 @@ function MainLayout() {
                                     aria-label="show 17 new notifications"
                                     color="inherit"
                                 >
-                                    <Badge badgeContent={cart?.length} color="error">
+                                    <Badge badgeContent={CartReducer?.length} color="error">
                                         <ShoppingCart />
                                     </Badge>
                                 </IconButton>
@@ -47,10 +46,10 @@ function MainLayout() {
                             {
                                 localStorage.getItem("token") ?
                                     <>
-                                    <Link to={'/addProduct'}>
-                                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                                            <Inventory />
-                                        </IconButton></Link>
+                                        <Link to={'/addProduct'}>
+                                            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                                                <Inventory />
+                                            </IconButton></Link>
                                         <IconButton
                                             size="large"
                                             edge="end"

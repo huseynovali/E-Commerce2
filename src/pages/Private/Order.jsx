@@ -7,14 +7,15 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import AddressCard from '../../Components/AddressCard';
-import { json, useNavigate } from 'react-router-dom';
-import { CartContext } from '../../Context/Cart';
+import { useNavigate } from 'react-router-dom';
+
 import moment from 'moment/moment';
+import { useDispatch } from 'react-redux';
 
 const steps = ['Select Address', 'Card Operations', 'Confirmation'];
 
 export default function Order() {
-    const { setCart } = useContext(CartContext)
+    const dispatch = useDispatch()
     let activUser = JSON.parse(localStorage.getItem("activeUser"))
     const [checkedAddress, setCheckedAddress] = useState({
         addressindex: 0,
@@ -46,7 +47,7 @@ export default function Order() {
         let orderData = JSON.parse(localStorage.getItem("userOrderData")) || [];
         let cart = JSON.parse(localStorage.getItem("cart"))
         localStorage.setItem("userOrderData", JSON.stringify([...orderData, { items: [...cart], date: date, ...checkedAddress }]));
-        setCart([])
+        dispatch({type:"CLEAR_ALL"})
         localStorage.setItem('cart', JSON.stringify([]))
         navigation("/");
     };

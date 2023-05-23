@@ -3,16 +3,12 @@ import { ProductsContext } from '../../Context/Products';
 import { Button, Card, CardActions, CardContent, CardMedia, Grid, Skeleton, Typography } from '@mui/material';
 import Item from "@mui/material/ListItem";
 import { Link } from 'react-router-dom';
-import { CartContext } from '../../Context/Cart';
-
+import { useDispatch } from 'react-redux';
 function AllProducts() {
   const [limit, setLimit] = useState(8)
   const { useGetProduct } = useContext(ProductsContext);
   const { isLoading, error, data, isSuccess } = useGetProduct(limit);
-
-
-  const { addCart } = useContext(CartContext);
-
+  const dispatch = useDispatch()
 
   return (
     <div>
@@ -61,7 +57,7 @@ function AllProducts() {
                     </Typography>
                   </CardContent>
                   <CardActions sx={{ position: "absolute", bottom: 0 }}>
-                    <Button variant="contained" onClick={() => addCart(item, "incriment")}>Add Cart</Button>
+                    <Button variant="contained" onClick={() => dispatch({type:"ADD_CART",payload:item})}>Add Cart</Button>
                     <Button size="small" ><Link style={{ textDecoration: "none", color: "blue" }} to={"product/" + item.id}>Learn More</Link></Button>
                   </CardActions>
                 </Card>
